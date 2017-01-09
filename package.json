@@ -1,0 +1,29 @@
+{
+  "name": "express-openid-connect-secured-jekyll",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Jekyll secured with Express using OpenID Connect",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js",
+    "start:nodemon": "nodemon server.js --ignore _site/"
+  },
+  "author": {
+    "name": "Ritter Insurance Marketing",
+    "url": "https://github.com/ritterim"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "connect-ensure-login": "^0.1.1",
+    "dotenv-safe": "^4.0.1",
+    "express": "^4.14.0",
+    "express-session": "^1.14.2",
+    "morgan": "^1.7.0",
+    "passport": "^0.2.2",
+    "passport-openidconnect": "^0.0.1",
+    "shelljs": "^0.7.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
