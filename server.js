@@ -1,6 +1,6 @@
 // https://github.com/passport/express-4.x-openidconnect-example/blob/master/server.js
 
-require('dotenv-safe').load();
+require('dotenv').config();
 
 const path = require('path');
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
