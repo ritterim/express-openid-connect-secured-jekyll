@@ -62,14 +62,6 @@ app.get('/callback', passport.authenticate('openidconnect'), (req, res) => {
   res.redirect(req.session.returnTo || '/');
 });
 
-app.get('/test', (req, res) => {
-  res.send('Welcome to /test.');
-});
-
-app.get('/test-secure', ensureLoggedIn(), (req, res) => {
-  res.send('Welcome to /test-secure.');
-});
-
 app.use(ensureLoggedIn(), express.static(path.join(__dirname, '_site')));
 
 if (!process.env.EXPRESS_NO_LISTEN) {
