@@ -1,4 +1,3 @@
-const assert = require('assert');
 const request = require('supertest');
 const passportStub = require('passport-stub');
 

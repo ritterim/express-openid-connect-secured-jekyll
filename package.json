@@ -5,9 +5,11 @@
   "description": "Jekyll secured with Express using OpenID Connect",
   "license": "MIT",
   "scripts": {
+    "lint": "eslint *.js",
     "start": "node server.js",
     "start:nodemon": "nodemon server.js --ignore _site/ --ignore '*.spec.js'",
-    "test": "cross-env EXPRESS_NO_LISTEN=true SILENT=true mocha *.spec.js"
+    "test": "cross-env EXPRESS_NO_LISTEN=true SILENT=true mocha *.spec.js",
+    "validate": "npm run lint && npm run test"
   },
   "author": {
     "name": "Ritter Insurance Marketing",
@@ -26,6 +28,7 @@
   },
   "devDependencies": {
     "cross-env": "^3.1.4",
+    "eslint": "^3.13.1",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
     "passport-stub": "^1.1.1",

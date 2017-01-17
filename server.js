@@ -66,7 +66,7 @@ app.use(ensureLoggedIn(), express.static(path.join(__dirname, '_site')));
 
 if (!process.env.EXPRESS_NO_LISTEN) {
   app.listen(port, () => {
-    console.log(`Express listening on port ${port}`);
+    console.log(`Express listening on port ${port}`); // eslint-disable-line no-console
   });
 }
 
