@@ -13,7 +13,13 @@ const port = process.env.port || 3000;
 
 // Begin serving a potential previous version of the site immediately
 setTimeout(() => {
-  shell.exec('bundle exec jekyll build');
+  const options = {};
+
+  if (process.env.SILENT) {
+    options.silent = true;
+  }
+
+  shell.exec('bundle exec jekyll build', options);
 });
 
 passport.use(new OidcStrategy({
@@ -41,7 +47,9 @@ passport.deserializeUser((user, done) => {
 
 const app = express();
 
-app.use(require('morgan')('combined'));
+if (!process.env.SILENT) {
+  app.use(require('morgan')('combined'));
+}
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({ secret: process.env.EXPRESS_SESSION_SECRET, resave: true, saveUninitialized: true }));
 
@@ -64,6 +72,10 @@ app.get('/test-secure', ensureLoggedIn(), (req, res) => {
 
 app.use(ensureLoggedIn(), express.static(path.join(__dirname, '_site')));
 
-app.listen(port, () => {
-  console.log(`Express listening on port ${port}`);
-});
+if (!process.env.EXPRESS_NO_LISTEN) {
+  app.listen(port, () => {
+    console.log(`Express listening on port ${port}`);
+  });
+}
+
+module.exports = app;

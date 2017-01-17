@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node server.js",
-    "start:nodemon": "nodemon server.js --ignore _site/"
+    "start:nodemon": "nodemon server.js --ignore _site/ --ignore '*.spec.js'",
+    "test": "cross-env EXPRESS_NO_LISTEN=true SILENT=true mocha *.spec.js"
   },
   "author": {
     "name": "Ritter Insurance Marketing",
@@ -24,6 +25,10 @@
     "shelljs": "^0.7.5"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0"
+    "cross-env": "^3.1.4",
+    "mocha": "^3.2.0",
+    "nodemon": "^1.11.0",
+    "passport-stub": "^1.1.1",
+    "supertest": "^2.0.1"
   }
 }
