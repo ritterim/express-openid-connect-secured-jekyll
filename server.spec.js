@@ -19,6 +19,14 @@ describe('When not authenticated', () => {
       .expect(302, done);
   });
 
+  it('returns expected response for a page that does not exist', done => {
+    request(app)
+      .get('/does-not-exist')
+      .expect('Location', '/login')
+      .expect('Found. Redirecting to /login')
+      .expect(302, done);
+  });
+
   it('returns expected response for /callback', done => {
     request(app)
       .get('/callback')
@@ -63,8 +71,14 @@ describe('When authenticated', () => {
     request(app)
       .get('/2017/01/01/a-test-post.html')
       .expect('Content-Type', /text\/html/)
-
       .expect(200, done);
+  });
+
+  it('returns expected response for a page that does not exist', done => {
+    request(app)
+      .get('/does-not-exist')
+      .expect('Content-Type', /text\/html/)
+      .expect(404, done);
   });
 });
 

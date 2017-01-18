@@ -72,7 +72,7 @@ app.use((req, res) => {
     if (err) {
       res.sendStatus(404);
     } else {
-      res.sendFile(http404FilePath);
+      res.status(404).sendFile(http404FilePath);
     }
   });
 });
