@@ -65,7 +65,7 @@ app.get('/callback', passport.authenticate('openidconnect'), (req, res) => {
 
 app.use(ensureLoggedIn(), express.static(path.join(__dirname, '_site')));
 
-app.get('*', (req, res) => {
+app.use((req, res) => {
   const http404FilePath = path.join(__dirname, '_site/404.html');
 
   fs.access(http404FilePath, fs.constants.F_OK, err => {
