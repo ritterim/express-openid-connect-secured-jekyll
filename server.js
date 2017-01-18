@@ -1,6 +1,8 @@
 // https://github.com/passport/express-4.x-openidconnect-example/blob/master/server.js
 
-require('dotenv').config();
+if (!process.env.SKIP_DOTENV_CONFIG) {
+  require('dotenv').config();
+}
 
 const fs = require('fs');
 const path = require('path');

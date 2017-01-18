@@ -8,7 +8,7 @@
     "lint": "eslint *.js",
     "start": "node server.js",
     "start:nodemon": "nodemon server.js --ignore _site/ --ignore '*.spec.js'",
-    "test": "cross-env EXPRESS_NO_LISTEN=true SILENT=true mocha *.spec.js",
+    "test": "cross-env EXPRESS_NO_LISTEN=true SILENT=true SKIP_DOTENV_CONFIG=true mocha *.spec.js",
     "validate": "npm run lint && npm run test"
   },
   "author": {
