@@ -2,6 +2,7 @@
 
 require('dotenv').config();
 
+const fs = require('fs');
 const path = require('path');
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 const shell = require('shelljs');
@@ -63,6 +64,18 @@ app.get('/callback', passport.authenticate('openidconnect'), (req, res) => {
 });
 
 app.use(ensureLoggedIn(), express.static(path.join(__dirname, '_site')));
+
+app.get('*', (req, res) => {
+  const http404FilePath = path.join(__dirname, '_site/404.html');
+
+  fs.access(http404FilePath, fs.constants.F_OK, err => {
+    if (err) {
+      res.sendStatus(404);
+    } else {
+      res.sendFile(http404FilePath);
+    }
+  });
+});
 
 if (!process.env.EXPRESS_NO_LISTEN) {
   app.listen(port, () => {
