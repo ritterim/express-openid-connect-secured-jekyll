@@ -56,7 +56,15 @@ if (!process.env.SILENT) {
   app.use(require('morgan')('combined'));
 }
 app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: process.env.EXPRESS_SESSION_SECRET, resave: true, saveUninitialized: true }));
+app.use(require('express-session')({
+  cookie: {
+    httpOnly: true,
+    secure: process.env.EXPRESS_INSECURE === 'true' ? false : true
+  },
+  resave: true,
+  saveUninitialized: true,
+  secret: process.env.EXPRESS_SESSION_SECRET
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
