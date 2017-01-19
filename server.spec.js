@@ -1,6 +1,7 @@
 const assert = require('assert');
 const request = require('supertest');
 const passportStub = require('passport-stub');
+const requireUncached = require('require-uncached');
 
 describe('When not authenticated', () => {
   let app;
@@ -8,12 +9,28 @@ describe('When not authenticated', () => {
   before(() => {
     setupTestEnvironment();
 
-    app = require('./server');
+    app = requireUncached('./server');
   });
 
   it('returns expected response for /', done => {
     request(app)
       .get('/')
+      .expect('Location', '/login')
+      .expect('Found. Redirecting to /login')
+      .expect(302, done);
+  });
+
+  it('returns expected response for /2017/01/01/a-test-post.html', done => {
+    request(app)
+      .get('/2017/01/01/a-test-post.html')
+      .expect('Location', '/login')
+      .expect('Found. Redirecting to /login')
+      .expect(302, done);
+  });
+
+  it('returns expected response for /assets/main.css', done => {
+    request(app)
+      .get('/assets/main.css')
       .expect('Location', '/login')
       .expect('Found. Redirecting to /login')
       .expect(302, done);
@@ -48,13 +65,46 @@ describe('When not authenticated', () => {
   });
 });
 
+describe('When not authenticated: process.env.PUBLIC_URLS tests', () => {
+  let app;
+
+  before(() => {
+    setupTestEnvironment();
+
+    process.env.PUBLIC_URLS = '/2017/01/01/a-test-post.html;/assets';
+
+    app = requireUncached('./server');
+  });
+
+  it('returns expected response for /2017/01/01/a-test-post.html when url is in process.env.PUBLIC_URLS', done => {
+    request(app)
+      .get('/2017/01/01/a-test-post.html')
+      .expect('Content-Type', /text\/html/)
+      .expect(200, done);
+  });
+
+  it('returns expected response for /assets/main.css when url is in process.env.PUBLIC_URLS', done => {
+    request(app)
+      .get('/assets/main.css')
+      .expect('Content-Type', /text\/css/)
+      .expect(200, done);
+  });
+
+  it('returns expected response for /ASSETS/MAIN.CSS when url is in process.env.PUBLIC_URLS', done => {
+    request(app)
+      .get('/ASSETS/MAIN.CSS')
+      .expect('Content-Type', /text\/css/)
+      .expect(200, done);
+  });
+});
+
 describe('When authenticated', () => {
   let app;
 
   before(() => {
     setupTestEnvironment();
 
-    app = require('./server');
+    app = requireUncached('./server');
     passportStub.install(app);
 
     passportStub.login({ username: 'test@example.org' });
@@ -71,6 +121,13 @@ describe('When authenticated', () => {
     request(app)
       .get('/2017/01/01/a-test-post.html')
       .expect('Content-Type', /text\/html/)
+      .expect(200, done);
+  });
+
+  it('returns expected response for /assets/main.css', done => {
+    request(app)
+      .get('/assets/main.css')
+      .expect('Content-Type', /text\/css/)
       .expect(200, done);
   });
 
@@ -91,4 +148,6 @@ function setupTestEnvironment() {
   process.env.CLIENT_SECRET = 'the_secret';
   process.env.CALLBACK_URL = 'https://example.com/callback';
   process.env.EXPRESS_SESSION_SECRET = 'abc123';
+
+  delete process.env.PUBLIC_URLS;
 }

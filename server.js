@@ -6,13 +6,15 @@ if (!process.env.SKIP_DOTENV_CONFIG) {
 
 const fs = require('fs');
 const path = require('path');
-const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 const shell = require('shelljs');
 const express = require('express');
 const passport = require('passport');
 const OidcStrategy = require('passport-openidconnect').Strategy;
 
 const port = process.env.port || 3000;
+const publicUrls = process.env.PUBLIC_URLS
+  ? process.env.PUBLIC_URLS.split(/\s*[,;]\s*/)
+  : [];
 
 // Begin serving a potential previous version of the site immediately
 setTimeout(() => {
@@ -65,7 +67,20 @@ app.get('/callback', passport.authenticate('openidconnect'), (req, res) => {
   res.redirect(req.session.returnTo || '/');
 });
 
-app.use(ensureLoggedIn(), express.static(path.join(__dirname, '_site')));
+// Reference: https://github.com/jaredhanson/connect-ensure-login/blob/cdb5769a3db7b8075b2ce90fab647f75f91b3c9a/lib/ensureLoggedIn.js
+app.use((req, res, next) => {
+  if (req.isAuthenticated() || publicUrls.some(u => u && new RegExp(`^${u}`, 'i').test(req.originalUrl))) {
+    next();
+  } else {
+    if (req.session) {
+      req.session.returnTo = req.originalUrl || req.url;
+    }
+
+    res.redirect('/login');
+  }
+});
+
+app.use(express.static(path.join(__dirname, '_site')));
 
 app.use((req, res) => {
   const http404FilePath = path.join(__dirname, '_site/404.html');

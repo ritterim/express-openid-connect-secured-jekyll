@@ -18,6 +18,20 @@ An example of securing a Jekyll powered website with Express using OpenID Connec
   - **server.js**
 - Deploy the Jekyll blog as a Node.js application.
 
+## Public URLs
+
+Set the `PUBLIC_URLS` environment variable using a comma or semicolon delimited string.
+
+- Specifying `/assets` will everything under that path.
+- Matches are case insensitive.
+- **NOTE: Specifying a url of `/` will make the entire site public.**
+
+**Example:**
+
+```
+/assets, /2017/01/01/a-test-post.html
+```
+
 ## Development quickstart
 
 - `cp .env.example .env`
