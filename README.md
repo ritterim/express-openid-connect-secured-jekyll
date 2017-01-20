@@ -9,14 +9,19 @@ An example of securing a Jekyll powered website with Express using OpenID Connec
 - `gem install bundler`
 - HTTPS is required for the `express-session` cookie, unless the `EXPRESS_INSECURE` environment variable is set to `"true"`.
 
-## Usage
+## Usage quickstart
+
+`ruby -e "$(curl -fsSL https://raw.githubusercontent.com/ritterim/express-openid-connect-secured-jekyll/master/install.rb)"`
+
+## Manual usage
 
 - Copy **package.json** and **server.js** from this repository into the Jekyll site.
 - Create **.env** in the Jekyll site using **.env.example** as a template.
-- Add the following excludes in the Jekyll site **_config.yml**:
+- Add the following `exclude` items in the Jekyll site **_config.yml**:
   - **node_modules/**
   - **package.json**
   - **server.js**
+- Add **node_modules/** to **.gitignore** if the target is a Git repository and it does not already contain this entry.
 - Deploy the Jekyll blog as a Node.js application.
 
 ## Public URLs
