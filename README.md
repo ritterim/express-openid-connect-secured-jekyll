@@ -11,7 +11,9 @@ An example of securing a Jekyll powered website with Express using OpenID Connec
 
 ## Usage quickstart
 
-`ruby -e "$(curl -fsSL https://raw.githubusercontent.com/ritterim/express-openid-connect-secured-jekyll/master/install.rb)"`
+```
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/ritterim/express-openid-connect-secured-jekyll/master/install.rb)"
+```
 
 ## Manual usage
 
