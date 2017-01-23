@@ -22,7 +22,7 @@
     "express-session": "^1.14.2",
     "morgan": "^1.7.0",
     "passport": "^0.2.2",
-    "passport-openidconnect": "github:jaredhanson/passport-openidconnect",
+    "passport-openidconnect": "github:jaredhanson/passport-openidconnect#1cf968b6eafd11e4ceb153c2ec1e6c38b69d6592",
     "shelljs": "^0.7.5"
   },
   "devDependencies": {
