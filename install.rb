@@ -24,7 +24,7 @@ File.open("server.js", "w") {|f|
 #
 
 config_file = "_config.yml"
-excludeItems = ["node_modules/", "package.json", "server.js"]
+excludeItems = ["node_modules/", "npm-debug.log", "package.json", "server.js"]
 
 config_str = IO.read(config_file)
 

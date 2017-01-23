@@ -34,6 +34,7 @@ exclude:
   - Gemfile.lock
   - build.cmd
   - node_modules/
+  - npm-debug.log
   - LICENSE
   - package.json
   - README.md
