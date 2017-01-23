@@ -33,5 +33,9 @@
     "passport-stub": "^1.1.1",
     "require-uncached": "^1.0.3",
     "supertest": "^2.0.1"
+  },
+  "engines": {
+    "node": ">=6 <7",
+    "npm": ">=3"
   }
 }

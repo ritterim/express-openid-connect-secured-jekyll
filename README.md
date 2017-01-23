@@ -4,7 +4,7 @@ An example of securing a Jekyll powered website with Express using OpenID Connec
 
 ## Usage requirements
 
-- Node.js (use v6 or later)
+- Node.js (v6 is set in **package.json** `engines`)
 - Ruby v2
 - `gem install bundler`
 - HTTPS is required for the `express-session` cookie, unless the `EXPRESS_INSECURE` environment variable is set to `"true"`.
