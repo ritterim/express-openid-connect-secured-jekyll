@@ -52,6 +52,10 @@ passport.deserializeUser((user, done) => {
 
 const app = express();
 
+if (process.env.TRUST_PROXY) {
+  app.set('trust proxy', 1);
+}
+
 if (!process.env.SILENT) {
   app.use(require('morgan')('combined'));
 }

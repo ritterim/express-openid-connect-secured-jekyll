@@ -8,6 +8,7 @@ An example of securing a Jekyll powered website with Express using OpenID Connec
 - Ruby v2
 - `gem install bundler`
 - HTTPS is required for the `express-session` cookie, unless the `EXPRESS_INSECURE` environment variable is set to `"true"`.
+- If `'trust proxy'` should be set for Express based on the hosting environment, set `TRUST_PROXY` environment variable to `"true"`.
 
 ## Usage quickstart
 
