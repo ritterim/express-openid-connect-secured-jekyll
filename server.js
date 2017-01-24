@@ -62,7 +62,7 @@ if (!process.env.SILENT) {
 app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({
   cookie: {
-    httpOnly: true,
+    httpOnly: process.env.SESSION_COOKIE_ALLOW_JS_ACCESS === 'true' ? false : true,
     secure: process.env.EXPRESS_INSECURE === 'true' ? false : true
   },
   resave: true,
