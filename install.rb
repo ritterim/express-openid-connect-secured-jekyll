@@ -3,6 +3,12 @@ require 'openssl'
 require 'open-uri'
 require 'yaml'
 
+# Source: http://stackoverflow.com/a/2889830 answering http://stackoverflow.com/questions/2889720/one-liner-in-ruby-for-displaying-a-prompt-getting-input-and-assigning-to-a-var
+def prompt(*args)
+    print(*args)
+    gets
+end
+
 #
 # Download and store the necessary files
 #
@@ -18,6 +24,16 @@ File.open("server.js", "w") {|f|
   str = open(url, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).read # Note: This is not secure
   f.write str
 }
+
+web_config_prompt = prompt "Would you like to include Web.config? [y/N] "
+
+if web_config_prompt.strip.downcase == "y"
+  File.open("Web.config", "w") {|f|
+    url = "https://raw.githubusercontent.com/ritterim/express-openid-connect-secured-jekyll/master/Web.config"
+    str = open(url, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).read # Note: This is not secure
+    f.write str
+  }
+end
 
 #
 # Add excludeItems to _config.yml file in a manner that will keep any comments
