@@ -48,7 +48,7 @@ describe('When not authenticated', () => {
     request(app)
       .get('/callback')
       .expect(res => {
-        const expectedStartsWith = `${process.env.AUTHORIZATION_URL}?response_type=code&client_id=${process.env.CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.CALLBACK_URL)}&scope=openid%20openid%20profile%20email&state=`;
+        const expectedStartsWith = `${process.env.AUTHORIZATION_URL}?response_type=code&client_id=${process.env.CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.CALLBACK_URL)}&scope=openid%20openid&state=`;
 
         assert.ok(res.headers.location.startsWith(expectedStartsWith),
           `The Location header of ${res.headers.location} does not start with ${expectedStartsWith}`);
@@ -60,7 +60,7 @@ describe('When not authenticated', () => {
     request(app)
       .get('/login')
       .expect(res => {
-        const expectedStartsWith = `${process.env.AUTHORIZATION_URL}?response_type=code&client_id=${process.env.CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.CALLBACK_URL)}&scope=openid%20openid%20profile%20email&state=`;
+        const expectedStartsWith = `${process.env.AUTHORIZATION_URL}?response_type=code&client_id=${process.env.CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.CALLBACK_URL)}&scope=openid%20openid&state=`;
 
         assert.ok(res.headers.location.startsWith(expectedStartsWith),
           `The Location header of ${res.headers.location} does not start with ${expectedStartsWith}`);

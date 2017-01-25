@@ -35,7 +35,7 @@ passport.use(new OidcStrategy({
   tokenURL: process.env.TOKEN_URL,
   userInfoURL: process.env.USER_INFO_URL,
   callbackURL: process.env.CALLBACK_URL,
-  scope: 'openid profile email'
+  scope: 'openid'
 }, verify));
 
 function verify(token, tokenSecret, profile, cb) {
