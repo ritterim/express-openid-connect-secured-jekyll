@@ -13,7 +13,7 @@ const OidcStrategy = require('passport-openidconnect').Strategy;
 
 const port = process.env.port || 3000;
 const publicUrls = process.env.PUBLIC_URLS
-  ? process.env.PUBLIC_URLS.split(/\s*[,;]\s*/)
+  ? process.env.PUBLIC_URLS.split(/\s*[,;]\s*/).map(x => x.trim())
   : [];
 
 // Begin serving a potential previous version of the site immediately
