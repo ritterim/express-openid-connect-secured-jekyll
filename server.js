@@ -60,7 +60,6 @@ if (process.env.TRUST_PROXY) {
 if (!process.env.SILENT) {
   app.use(require('morgan')('combined'));
 }
-app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({
   cookie: {
     httpOnly: process.env.SESSION_COOKIE_ALLOW_JS_ACCESS === 'true' ? false : true,
