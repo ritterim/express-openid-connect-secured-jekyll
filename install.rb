@@ -19,6 +19,12 @@ File.open("package.json", "w") {|f|
   f.write str
 }
 
+File.open("npm-shrinkwrap.json", "w") {|f|
+  url = "https://raw.githubusercontent.com/ritterim/express-openid-connect-secured-jekyll/master/npm-shrinkwrap.json"
+  str = open(url, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).read # Note: This is not secure
+  f.write str
+}
+
 File.open("server.js", "w") {|f|
   url = "https://raw.githubusercontent.com/ritterim/express-openid-connect-secured-jekyll/master/server.js"
   str = open(url, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).read # Note: This is not secure
@@ -40,7 +46,7 @@ end
 #
 
 config_file = "_config.yml"
-excludeItems = ["node_modules/", "npm-debug.log", "package.json", "server.js"]
+excludeItems = ["node_modules/", "npm-shrinkwrap.json", "npm-debug.log", "package.json", "server.js"]
 
 config_str = IO.read(config_file)
 

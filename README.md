@@ -21,11 +21,12 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/ritterim/express-openid-
 
 ## Manual usage
 
-- Copy **package.json** and **server.js** from this repository into the Jekyll site.
+- Copy **package.json**, **npm-shrinkwrap.json**, and **server.js** from this repository into the Jekyll site.
 - Create **.env** in the Jekyll site using **.env.example** as a template.
 - Add the following `exclude` items in the Jekyll site **_config.yml**:
   - **node_modules/**
   - **package.json**
+  - **npm-shrinkwrap.json**
   - **server.js**
 - Add **node_modules/** to **.gitignore** if the target is a Git repository and it does not already contain this entry.
 - Deploy the Jekyll blog as a Node.js application.
