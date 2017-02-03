@@ -4,6 +4,7 @@ const request = require('supertest');
 const passportStub = require('passport-stub');
 const requireUncached = require('require-uncached');
 const sinon = require('sinon');
+const uuid = require('uuid');
 
 describe('When not authenticated', () => {
   let app;
@@ -193,7 +194,7 @@ describe('authenticateRequestsMiddleware: Authenticated', () => {
   });
 });
 
-describe('authenticateRequestsMiddleware: Bearer tokens authentication enabled', () => {
+describe('authenticateRequestsMiddleware: Bearer token authentication enabled', () => {
   let app;
   let requestPackage;
 
@@ -212,10 +213,12 @@ describe('authenticateRequestsMiddleware: Bearer tokens authentication enabled',
   });
 
   it('should set req.user.sub for success response from Bearer token validation endpoint', done => {
+    const token = uuid();
+
     const req = httpMocks.createRequest({
       method: 'GET',
       url: '/',
-      headers: { Authorization: 'Bearer abc123' },
+      headers: { Authorization: `Bearer ${token}` },
       isAuthenticated: () => false
     });
 
@@ -232,16 +235,18 @@ describe('authenticateRequestsMiddleware: Bearer tokens authentication enabled',
   });
 
   it('should return 401 for non-success response from Bearer token validation endpoint', done => {
+    const token = uuid();
+
     const req = httpMocks.createRequest({
       method: 'GET',
       url: '/',
-      headers: { Authorization: 'Bearer abc123' },
+      headers: { Authorization: `Bearer ${token}` },
       isAuthenticated: () => false
     });
 
     const res = httpMocks.createResponse();
 
-    sinon.stub(requestPackage, 'post').yields(null, { statusCode: 400 });
+    sinon.stub(requestPackage, 'post').yields(null, { statusCode: 500 });
 
     app.authenticateRequestsMiddleware(
       req,
@@ -249,6 +254,43 @@ describe('authenticateRequestsMiddleware: Bearer tokens authentication enabled',
       () => { });
 
     assert.equal(res.statusCode, 401);
+
+    done();
+  });
+
+  it('should cache success response from Bearer token validation endpoint and use cache for next matching request', done => {
+    const token = uuid();
+
+    const firstReq = httpMocks.createRequest({
+      method: 'GET',
+      url: '/',
+      headers: { Authorization: `Bearer ${token}` },
+      isAuthenticated: () => false
+    });
+
+    sinon.stub(requestPackage, 'post').yields(null, { statusCode: 200 }, { sub: 'sub_value' });
+
+    app.authenticateRequestsMiddleware(
+      firstReq,
+      httpMocks.createResponse(),
+      () => { });
+
+    requestPackage.post.restore();
+    sinon.stub(requestPackage, 'post').yields(null, { statusCode: 500 });
+
+    const secondReq = httpMocks.createRequest({
+      method: 'GET',
+      url: '/',
+      headers: { Authorization: `Bearer ${token}` },
+      isAuthenticated: () => false
+    });
+
+    app.authenticateRequestsMiddleware(
+      secondReq,
+      httpMocks.createResponse(),
+      () => { });
+
+    assert.equal(secondReq.user.sub, 'sub_value');
 
     done();
   });
@@ -266,10 +308,12 @@ describe('authenticateRequestsMiddleware: Bearer token authentication not enable
   });
 
   it('should return 401 for any requests with Bearer token', done => {
+    const token = uuid();
+
     const req = httpMocks.createRequest({
       method: 'GET',
       url: '/',
-      headers: { Authorization: 'Bearer abc123' },
+      headers: { Authorization: `Bearer ${token}` },
       isAuthenticated: () => false
     });
 

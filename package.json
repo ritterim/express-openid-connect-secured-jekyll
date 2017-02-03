@@ -20,6 +20,7 @@
     "express": "^4.14.0",
     "express-session": "^1.14.2",
     "morgan": "^1.7.0",
+    "node-cache": "^4.1.1",
     "passport": "^0.2.2",
     "passport-openidconnect": "github:jaredhanson/passport-openidconnect#1cf968b6eafd11e4ceb153c2ec1e6c38b69d6592",
     "request": "^2.79.0",
@@ -34,7 +35,8 @@
     "passport-stub": "^1.1.1",
     "require-uncached": "^1.0.3",
     "sinon": "^1.17.7",
-    "supertest": "^2.0.1"
+    "supertest": "^2.0.1",
+    "uuid": "^3.0.1"
   },
   "engines": {
     "node": ">=6 <7",
