@@ -53,34 +53,8 @@ passport.deserializeUser((user, done) => {
 
 const app = express();
 
-if (process.env.TRUST_PROXY) {
-  app.set('trust proxy', 1);
-}
-
-if (!process.env.SILENT) {
-  app.use(require('morgan')('combined'));
-}
-app.use(require('express-session')({
-  cookie: {
-    httpOnly: process.env.SESSION_COOKIE_ALLOW_JS_ACCESS === 'true' ? false : true,
-    secure: process.env.EXPRESS_INSECURE === 'true' ? false : true
-  },
-  resave: true,
-  saveUninitialized: true,
-  secret: process.env.EXPRESS_SESSION_SECRET
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.get('/login', passport.authenticate('openidconnect'));
-
-app.get('/callback', passport.authenticate('openidconnect'), (req, res) => {
-  res.redirect(req.session.returnTo || '/');
-});
-
 // Reference: https://github.com/jaredhanson/connect-ensure-login/blob/cdb5769a3db7b8075b2ce90fab647f75f91b3c9a/lib/ensureLoggedIn.js
-app.use((req, res, next) => {
+app.authenticateRequestsMiddleware = function(req, res, next) {
   if (publicUrls.some(u => u && new RegExp(`^${u}`, 'i').test(req.originalUrl))) {
     next();
   } else if (req.headers.authorization && /bearer/i.test(req.headers.authorization)) {
@@ -114,7 +88,35 @@ app.use((req, res, next) => {
       res.redirect('/login');
     }
   }
+};
+
+if (process.env.TRUST_PROXY) {
+  app.set('trust proxy', 1);
+}
+
+if (!process.env.SILENT) {
+  app.use(require('morgan')('combined'));
+}
+app.use(require('express-session')({
+  cookie: {
+    httpOnly: process.env.SESSION_COOKIE_ALLOW_JS_ACCESS === 'true' ? false : true,
+    secure: process.env.EXPRESS_INSECURE === 'true' ? false : true
+  },
+  resave: true,
+  saveUninitialized: true,
+  secret: process.env.EXPRESS_SESSION_SECRET
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('/login', passport.authenticate('openidconnect'));
+
+app.get('/callback', passport.authenticate('openidconnect'), (req, res) => {
+  res.redirect(req.session.returnTo || '/');
 });
+
+app.use(app.authenticateRequestsMiddleware);
 
 app.use(express.static(path.join(__dirname, '_site')));
 
