@@ -52,6 +52,8 @@ Set the `PUBLIC_URLS` environment variable using a comma or semicolon delimited 
 - `npm install`
 - `npm start`
 
+If you encounter issues running locally with SSL certification validation, try adding `NODE_TLS_REJECT_UNAUTHORIZED=0` to **.env**. This should only be done in a local development scenario. See https://stackoverflow.com/a/21961005 answering https://stackoverflow.com/questions/10888610/ignore-invalid-self-signed-ssl-certificate-in-node-js-with-https-request.
+
 ## Development choices rationale
 
 This repository is designed being able to easily copy a small number of files into a Jekyll site to add authentication.
