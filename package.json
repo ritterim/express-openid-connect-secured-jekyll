@@ -24,7 +24,8 @@
     "passport": "^0.2.2",
     "passport-openidconnect": "github:jaredhanson/passport-openidconnect#1cf968b6eafd11e4ceb153c2ec1e6c38b69d6592",
     "request": "^2.79.0",
-    "shelljs": "^0.7.5"
+    "shelljs": "^0.7.5",
+    "winston": "^2.3.1"
   },
   "devDependencies": {
     "cross-env": "^3.1.4",

@@ -1,7 +1,5 @@
 // https://github.com/passport/express-4.x-openidconnect-example/blob/master/server.js
 
-/* eslint-disable no-console */
-
 if (!process.env.SKIP_DOTENV_CONFIG) {
   require('dotenv').config();
 }
@@ -14,6 +12,7 @@ const NodeCache = require('node-cache');
 const passport = require('passport');
 const OidcStrategy = require('passport-openidconnect').Strategy;
 const request = require('request');
+const winston = require('winston');
 
 const memoryCache = new NodeCache();
 const tokenCacheLifetimeSeconds = process.env.TOKEN_CACHE_SECONDS || 60 * 60; // Default: 1 hour in seconds
@@ -127,7 +126,7 @@ app.get('/login', passport.authenticate('openidconnect'));
 app.get('/callback', passport.authenticate('openidconnect'), (req, res) => {
   if (process.env.SET_BEARER_TOKEN_COOKIE_FOR_JAVASCRIPT) {
     if (!process.env.CLIENT_CREDENTIALS_SCOPE) {
-      console.error('process.env.CLIENT_CREDENTIALS_SCOPE must be set.');
+      winston.error('process.env.CLIENT_CREDENTIALS_SCOPE must be set.');
       res.redirect(req.session.returnTo || '/');
     } else {
       const bearerTokenCookieName = process.env.BEARER_TOKEN_COOKIE_NAME || 'token';
@@ -143,12 +142,12 @@ app.get('/callback', passport.authenticate('openidconnect'), (req, res) => {
         },
       }, (tokenErr, tokenRes, tokenBody) => {
         if (tokenErr) {
-          console.log('tokenErr:', tokenErr);
+          winston.info('tokenErr:', tokenErr);
         }
 
         if (tokenErr || tokenRes.statusCode >= 400) {
           // Allow static HTML pages to load if there is a failure
-          console.warn(`Unable to set ${bearerTokenCookieName} cookie due to failure retrieving token for req.user.id: '${req.user.id}'. tokenBody: ${tokenBody}`);
+          winston.warn(`Unable to set ${bearerTokenCookieName} cookie due to failure retrieving token for req.user.id: '${req.user.id}'. tokenBody: ${tokenBody}`);
         } else {
           res.cookie(bearerTokenCookieName, JSON.parse(tokenBody).access_token, {
             httpOnly: false,
@@ -182,7 +181,7 @@ app.use((req, res) => {
 
 if (!process.env.EXPRESS_NO_LISTEN) {
   app.listen(port, () => {
-    console.log(`Express listening on port ${port}`);
+    winston.info(`Express listening on port ${port}`);
   });
 }
 
