@@ -1,5 +1,7 @@
 // https://github.com/passport/express-4.x-openidconnect-example/blob/master/server.js
 
+/* eslint-disable no-console */
+
 if (!process.env.SKIP_DOTENV_CONFIG) {
   require('dotenv').config();
 }
@@ -123,7 +125,43 @@ app.use(passport.session());
 app.get('/login', passport.authenticate('openidconnect'));
 
 app.get('/callback', passport.authenticate('openidconnect'), (req, res) => {
-  res.redirect(req.session.returnTo || '/');
+  if (process.env.SET_BEARER_TOKEN_COOKIE_FOR_JAVASCRIPT) {
+    if (!process.env.CLIENT_CREDENTIALS_SCOPE) {
+      console.error('process.env.CLIENT_CREDENTIALS_SCOPE must be set.');
+      res.redirect(req.session.returnTo || '/');
+    } else {
+      const bearerTokenCookieName = process.env.BEARER_TOKEN_COOKIE_NAME || 'token';
+
+      request.post({
+        url: process.env.TOKEN_URL,
+        headers: {
+          Authorization: `Basic ${Buffer.from(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString('base64')}`
+        },
+        form: {
+          grant_type: 'client_credentials',
+          scope: process.env.CLIENT_CREDENTIALS_SCOPE,
+        },
+      }, (tokenErr, tokenRes, tokenBody) => {
+        if (tokenErr) {
+          console.log('tokenErr:', tokenErr);
+        }
+
+        if (tokenErr || tokenRes.statusCode >= 400) {
+          // Allow static HTML pages to load if there is a failure
+          console.warn(`Unable to set ${bearerTokenCookieName} cookie due to failure retrieving token for req.user.id: '${req.user.id}'. tokenBody: ${tokenBody}`);
+        } else {
+          res.cookie(bearerTokenCookieName, JSON.parse(tokenBody).access_token, {
+            httpOnly: false,
+            secure: process.env.EXPRESS_INSECURE === 'true' ? false : true
+          });
+        }
+
+        res.redirect(req.session.returnTo || '/');
+      });
+    }
+  } else {
+    res.redirect(req.session.returnTo || '/');
+  }
 });
 
 app.use(app.authenticateRequestsMiddleware);
@@ -144,7 +182,7 @@ app.use((req, res) => {
 
 if (!process.env.EXPRESS_NO_LISTEN) {
   app.listen(port, () => {
-    console.log(`Express listening on port ${port}`); // eslint-disable-line no-console
+    console.log(`Express listening on port ${port}`);
   });
 }
 

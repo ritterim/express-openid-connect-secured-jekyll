@@ -338,8 +338,11 @@ function setupTestEnvironment() {
   process.env.CLIENT_ID = 'TestClient';
   process.env.CLIENT_SECRET = 'the_secret';
   process.env.CALLBACK_URL = 'https://example.com/callback';
+  process.env.CLIENT_CREDENTIALS_SCOPE = 'test-scope';
   process.env.EXPRESS_SESSION_SECRET = 'abc123';
 
   delete process.env.PUBLIC_URLS;
   delete process.env.TOKEN_VALIDATION_URL;
+  delete process.env.SET_BEARER_TOKEN_COOKIE_FOR_JAVASCRIPT;
+  delete process.env.BEARER_TOKEN_COOKIE_NAME;
 }
