@@ -6,7 +6,7 @@ An example of securing a Jekyll powered website with Express using OpenID Connec
 
 ## Environment requirements
 
-- Node.js (v6 is set in **package.json** `engines`)
+- Node.js (v6 or v7 is set in **package.json** `engines`)
 - Ruby v2
 - `gem install bundler`
 
