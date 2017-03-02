@@ -1,6 +1,6 @@
 # Express OpenID Connect Secured Jekyll
 
-An example of securing a Jekyll powered website with Express using OpenID Connect.
+An Express application for securing a Jekyll powered website using OpenID Connect `authorization_flow`, with optional support for JavaScript clients using `client_credentials`.
 
 **Note:** This library is currently targeting IdentityServer3.
 
