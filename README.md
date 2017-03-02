@@ -2,8 +2,6 @@
 
 An Express application for securing a Jekyll powered website using OpenID Connect `authorization_flow`, with optional support for JavaScript clients using `client_credentials`.
 
-**Note:** This library is currently targeting IdentityServer3.
-
 ## Environment requirements
 
 - Node.js (v6 or v7 is set in **package.json** `engines`)
