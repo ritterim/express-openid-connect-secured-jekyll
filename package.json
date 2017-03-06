@@ -2,7 +2,7 @@
   "name": "express-openid-connect-secured-jekyll",
   "version": "0.0.0",
   "private": true,
-  "description": "Jekyll secured with Express using OpenID Connect",
+  "description": "An Express application for securing a Jekyll powered website using OpenID Connect `authorization_flow`, with optional support for JavaScript clients using `client_credentials`.",
   "license": "MIT",
   "scripts": {
     "lint": "eslint *.js",
