@@ -36,7 +36,7 @@
     "passport-stub": "^1.1.1",
     "require-uncached": "^1.0.3",
     "sinon": "^1.17.7",
-    "supertest": "^2.0.1",
+    "supertest": "^3.0.0",
     "uuid": "^3.0.1"
   },
   "engines": {
