@@ -1,6 +1,5 @@
 environment:
   matrix:
-    - nodejs_version: "6"
     - nodejs_version: "7"
 
 install:
@@ -18,3 +17,6 @@ cache:
   - node_modules -> package.json
 
 test: off
+
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
