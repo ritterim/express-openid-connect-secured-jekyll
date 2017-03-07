@@ -8,6 +8,8 @@ const fs = require('fs');
 const path = require('path');
 const shell = require('shelljs');
 const express = require('express');
+const expressSession = require('express-session');
+const RedisStore = require('connect-redis')(expressSession);
 const NodeCache = require('node-cache');
 const passport = require('passport');
 const OidcStrategy = require('passport-openidconnect').Strategy;
@@ -108,14 +110,26 @@ if (process.env.TRUST_PROXY) {
 if (!process.env.SILENT) {
   app.use(require('morgan')('combined'));
 }
-app.use(require('express-session')({
+
+if (process.env.EXPRESS_SESSION_REDIS_URL
+    && !process.env.EXPRESS_SESSION_REDIS_KEY_PREFIX) {
+  throw new Error('process.env.EXPRESS_SESSION_REDIS_KEY_PREFIX must be set.');
+}
+
+app.use(expressSession({
   cookie: {
     httpOnly: process.env.SESSION_COOKIE_ALLOW_JS_ACCESS === 'true' ? false : true,
     secure: process.env.EXPRESS_INSECURE === 'true' ? false : true
   },
   resave: true,
   saveUninitialized: true,
-  secret: process.env.EXPRESS_SESSION_SECRET
+  secret: process.env.EXPRESS_SESSION_SECRET,
+  store: process.env.EXPRESS_SESSION_REDIS_URL
+    ? new RedisStore({
+      url: process.env.EXPRESS_SESSION_REDIS_URL,
+      prefix: process.env.EXPRESS_SESSION_REDIS_KEY_PREFIX + ':'
+    })
+    : undefined
 }));
 
 app.use(passport.initialize());
