@@ -1,13 +1,19 @@
 #!/usr/bin/env ruby
 require 'openssl'
 require 'open-uri'
+require 'optparse'
+require 'ostruct'
 require 'yaml'
 
-# Source: http://stackoverflow.com/a/2889830 answering http://stackoverflow.com/questions/2889720/one-liner-in-ruby-for-displaying-a-prompt-getting-input-and-assigning-to-a-var
-def prompt(*args)
-    print(*args)
-    gets
-end
+options = OpenStruct.new
+options.web_config = false
+OptionParser.new do |opts|
+  opts.banner = "Usage: install.rb [options]"
+
+  opts.on("-w", "--[no-]web.config", "Include web.config") do |v|
+    options.web_config = v
+  end
+end.parse!
 
 #
 # Download and store the necessary files
@@ -31,9 +37,7 @@ File.open("server.js", "w") {|f|
   f.write str
 }
 
-web_config_prompt = prompt "Would you like to include Web.config? [y/N] "
-
-if web_config_prompt.strip.downcase == "y"
+if options.web_config
   File.open("Web.config", "w") {|f|
     url = "https://raw.githubusercontent.com/ritterim/express-openid-connect-secured-jekyll/master/Web.config"
     str = open(url, { ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE }).read # Note: This is not secure

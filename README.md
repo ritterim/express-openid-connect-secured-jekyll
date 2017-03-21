@@ -14,6 +14,12 @@ An Express application for securing a Jekyll powered website using OpenID Connec
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/ritterim/express-openid-connect-secured-jekyll/master/install.rb)"
 ```
 
+Or, with **web.config** included:
+
+```
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/ritterim/express-openid-connect-secured-jekyll/master/install.rb) - -w"
+```
+
 ## Manual usage
 
 - Copy **package.json**, **npm-shrinkwrap.json**, and **server.js** from this repository into the Jekyll site.
