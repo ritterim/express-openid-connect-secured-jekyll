@@ -1,8 +1,10 @@
 environment:
   matrix:
-    - nodejs_version: "6"
-      RUBY_VERSION: 23
-    - nodejs_version: "7"
+    - nodejs_version: STABLE
+      RUBY_VERSION: 25
+    - nodejs_version: LTS
+      RUBY_VERSION: 25
+    - nodejs_version: 6
       RUBY_VERSION: 23
 
 install:
