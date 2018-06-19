@@ -15,8 +15,6 @@ before_build:
   - gem --version
   - node --version
   - npm --version
-  - gem install bundler
-  - bundle install
 
 build_script:
   - ./build.cmd
